@@ -1,0 +1,55 @@
+<style>
+.bringMeSomeWhereLinks {
+  color: orange;
+  font-size: 1.4em;
+}
+</style>
+
+<% if signed_in? %>
+  <h1> New Organization </h1>
+  <br><br>
+  <%=  render 'form', :book => @book %>
+<% else %>
+<div class="col-md-12">
+  <h1>Sorry, you must be signed in to create an Organization </h1> <br>
+  <h3 style="font-size: 1.7em;">Okay, bring me to: </h3> <br><br>
+  <div class="col-md-2" style="margin-left: -10px;">
+    <h4> <%= link_to 'Front Feed', root_path, :class => 'bringMeSomeWhereLinks' %> </h4>
+    </div>
+    <div class="col-md-4">
+      <h4> <%= link_to "Somewhere to Log In", new_user_session_path, :class => 'bringMeSomeWhereLinks'%></h4>
+    </div>
+  </div>
+<% end %>
+
+<script>
+function checkInput (){
+   var val = $('#org_name').val();
+   var val2;
+  
+  	//if name field has not been filled in
+   if (val == null || val == ""){
+   	val = "Please fill in the <text class='theme_blue'> <b>name </b></text>of the organization before telling us about it."
+    } 
+    //name field would have been filled in to get here
+    else{
+    	//temporally store text within name field in here
+   		val2 = val;
+   		//construct the string witht the correct values
+   		val = "Tell us about " + "<b class='theme_blue'>" + val2 + "</b>" + " (Description).";
+    }
+
+    //output result to screen
+   document.getElementById("price").innerHTML = val;
+}
+
+$( document ).ready(function() {
+    $('#org_description').focus(function() 
+    { 
+    	//alert('999'); 
+    	checkInput();
+    });
+});	
+
+
+</script>

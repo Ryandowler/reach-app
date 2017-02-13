@@ -1,0 +1,79 @@
+
+<!-- Instantly display image before upload-->
+<script>
+	$(document).ready(function(){
+    var preview = $(".upload-preview img");
+    
+    $(".file").change(function(event){
+       var input = $(event.currentTarget);
+       var file = input[0].files[0];
+       var reader = new FileReader();
+       reader.onload = function(e){
+           image_base64 = e.target.result;
+           preview.attr("src", image_base64);
+       };
+       reader.readAsDataURL(file);
+    });
+});
+</script>
+
+<style>
+	/* make previes image same size as old image */
+	.upload-preview img {
+		max-width: 480px;
+		max-height: 420px;
+	}
+</style>
+
+
+<h1>Update Organization</h1>
+<ul>
+<br>
+
+<%= simple_form_for @book, :html => { :multipart => true } do |f| %>
+
+<!--		category -->
+<h4 class="fieldHeader"> Category </h4>
+<%= f.select :category_id, @categories %>
+
+	<br><br>
+
+	<!--			Name -->
+	<h4 class="fieldHeader"> Name of the Organization </h4>
+	<%= f.input :title, label: false, :input_html => { :id => 'org_name' }  %>
+
+	<!--			Description -->
+	<h4 id="price" class="fieldHeader"> Description </h4>
+	<%= f.input :description, label: false, :input_html => { :id => 'org_description' } %>
+
+
+	<div class="col-md-6">
+		<div class="col-md-6"> <h3> Old image: </h3></div> 
+		<br><br>
+		<hr>
+		<%= image_tag @book.my_file.medium.url.to_s %><br/><br/>
+
+	</div>
+	<div class="col-md-6">
+		<div class="col-md-6"> <h3> Choose new image: </h3></div> 
+		<div class="col-md-6" style="margin-top: 10px; margin-left: -20px; "> <h4> <%= f.file_field :my_file, class: "file" %> </h4></div> 
+		<br><br>
+		<hr>
+		
+		<div class="upload-preview">
+		    <img />
+		</div>
+		
+	</div>
+
+	<div class="col-md-12">
+		<%= f.button :submit%>
+		<%= link_to "Cancel", root_path %>
+	</div>
+<% end %>
+
+
+
+
+
+

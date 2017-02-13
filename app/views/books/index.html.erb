@@ -1,0 +1,300 @@
+
+<style>
+	
+	.profile-index{
+	
+	background-color: #DFF4F5;
+	color: green; 
+	/*margin-left:5px;*/
+	border: solid 5px white;
+}
+
+/* style for error message passed from controller
+   when user tries to acces non existing record */
+.noOrgsError{
+	background-color: #FFC64A ;
+	margin-left: -10px;
+	cursor: pointer; cursor: hand; 
+}
+.noOrgsError h2, h3{margin-left: -10px;}
+.noOrgsError span:hover{color: #DFF4F5;}
+/* ./error message */
+
+
+
+
+/* scrollboxes */
+/* The heart of the matter */
+.row {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.col-md-3 {
+  display: inline-block;
+  float: none;
+}
+/* -end  scrollboxes */
+
+</style>
+
+<h1 class="current-category">
+	<% if params[:category]%>
+ 		<%= params[:category] %>
+ 	<% else %>
+ 	<h1> Feed here </h1>
+ 	<!-- testing purposes -->
+ 	<h4 class="visible-lg">large</h4>
+ 	<h4 class="visible-md">medium</h4>
+ 	<h4 class="visible-sm">small</h4>
+ 	<h4 class="visible-xs">x small</h4>
+
+ 	<hr>
+ 	<% end %>
+ </h1>
+
+<% words = %w(how wood wood would a wood chuck chuck chuck chuck chuck chuck chuck chuck chuck chuck wood) %>
+<!-- counts the occourances of the words from the array 'words' -->
+<% words.each_with_object(Hash.new(0)) { |word,counts| counts[word] += 1 } %>
+
+
+
+
+
+<% if @books.count == 0 %>
+
+	<h1> There are no Organizations to show </h1> <br><br>Ryan add in an image here<br><br>
+	<hr>
+	<table style="width:100%">
+	  <tr>
+	    <td>Okay then, </td>
+	    <td><%= link_to "Bring me to the Home Page", root_path %></td>
+	  </tr>
+	  <tr>
+	    <td></td> <!-- To create the positioning nessesary -->
+	    <td>
+	    <%= link_to "Bring me to my Profile (add right link in here ryan)", 
+	    	user_profile_path(current_user.id) %>
+	  </tr>
+	</table>
+<% else %>
+
+
+
+<!-- testingggg -->
+<% @books.each do |b| %>
+	<!-- getting the daily view count of the current organization being looped -->
+	<% @tempb = b.impressionist_count(:start_date=>Date.today) %>
+	<!-- output the info if that daily count is less than 10 -->
+	<% b.title if @tempb < 10 %>
+
+<% end %><!-- end of each loop-->
+
+<!-- end- testingggg -->
+	<br><br><br><br>
+			<%=  request.location.city %>
+			
+	<br><br><br><br>
+
+			<% for book1 in @books.first.nearbys(10) %>
+				<%= link_to book1.title, book1 %> (<%= book1.distance.round(2) %>  miles)
+			<% end %>
+
+
+
+
+<!-- new to Reach -->
+<% if !params[:category]%>
+<% if @books_no_order %>
+	<div class="container testimonial-group">
+		<h1 style="color: orange; margin-left: -10px;">New to Reach</h1>
+		<div class="row text-center scrollBar_nice2">
+			
+				<% @books_no_order.shuffle.each do |book| %>
+
+	
+
+					<%= link_to book_path(book) do %>
+						<div class="col-md-3 profile-index" style="overflow: hidden; min-height: 450px; max-height: 450px;">
+							<div style="min-height: 50px; max-height: 50px; overflow: hidden;"> 
+								<h4 style="font-size: 14pt">
+								<%= truncate(book.title, :length => 27, :omission => '...')%>
+								</h4>
+							</div>
+							<div style="border-bottom: 1px solid red; margin-bottom:10px; max-width: 260px; max-height: 260px; min-width: 260px; min-height: 260px;" class="test" >
+								<%= image_tag book.my_file.thumb.url, class: "org_img" %>
+								<br><br>
+							</div>
+							<div style=" max-height: 100px; min-height: 100px; overflow: hidden; white-space: normal; text-align: left;"> 
+								<%=  truncate(book.description, :length => 130, :omission => '... (continued)') %>
+							</div>
+						</div>
+					<% end %><!-- end of link-->
+				
+			<% end %><!-- end of loop -->
+		</div>
+	</div>
+<% end %><!-- end of checking iv var is not empty -->
+<% end %><!-- end of checking if category is being viewed -->
+<!-- end- new to Reach -->
+
+<!-- needs love -->
+<% if !params[:category]%>
+	<div class="container testimonial-group">
+		<h1 style="color: orange;  margin-left: -10px;">Needs some Love</h1>
+		<div class="row text-center scrollBar_nice2">
+			<% @books.each do |book| %>
+				<!-- getting the daily view count of the current organization being looped -->
+				<% @tempb = book.impressionist_count(:start_date=>Date.today) %>
+				<!-- output the info if that daily count is less than 10 -->
+				<% if @tempb < 5 %>
+					<%= link_to book_path(book) do %>
+						<div class="col-md-3 profile-index" style="overflow: hidden; min-height: 450px; max-height: 450px;">
+							<div style="min-height: 50px; max-height: 50px; overflow: hidden;"> 
+								<h4 style="font-size: 14pt">
+								<%= truncate(book.title, :length => 27, :omission => '...')%>
+								</h4>
+							</div>
+							<div style="border-bottom: 1px solid red; margin-bottom:10px; max-width: 260px; max-height: 260px; min-width: 260px; min-height: 260px;" class="test" >
+							<%= image_tag book.my_file.thumb.url, class: "org_img" %>
+							<br><br>
+						</div>
+							<div style=" max-height: 100px; min-height: 100px; overflow: hidden; white-space: normal; text-align: left;"> 
+								<%=  truncate(book.description, :length => 130, :omission => '... (continued)') %>
+								<%= @tempb %>
+							</div>
+						</div>
+					<% end %><!-- end of link-->
+				<% end %><!-- end of check (checked to se if daily views is less than 5)-->
+			<% end %><!-- end of loop -->
+		</div>
+	</div>	<!-- end- needs love -->
+<% end %><!-- end of checking if category is being viewed -->
+
+<!-- Favorites of the day -->
+	<% if !params[:category]%>
+	<div class="container testimonial-group">
+		<h1 style="color: orange;  margin-left: -10px;">Favorites of the day</h1>
+		<div class="row text-center scrollBar_nice2">
+			<% @books.each do |book| %>
+				<!-- getting the daily view count of the current organization being looped -->
+				<% @tempb = book.impressionist_count(:start_date=>Date.today) %>
+				<!-- output the info if that daily count is less than 10 -->
+				<% if @tempb >= 10 %>
+					<%= link_to book_path(book) do %>
+						<div class="col-md-3 profile-index" style="overflow: hidden; min-height: 450px; max-height: 450px;">
+							<div style="min-height: 50px; max-height: 50px; overflow: hidden;"> 
+								<h4 style="font-size: 14pt">
+								<%= truncate(book.title, :length => 27, :omission => '...')%>
+								</h4>
+							</div>
+							<div style="border-bottom: 1px solid red; margin-bottom:10px; max-width: 260px; max-height: 260px; min-width: 260px; min-height: 260px;" class="test" >
+							<%= image_tag book.my_file.thumb.url, class: "org_img" %>
+							<br><br>
+						</div>
+							<div style=" max-height: 100px; min-height: 100px; overflow: hidden; white-space: normal; text-align: left;"> 
+								<%=  truncate(book.description, :length => 130, :omission => '... (continued)') %>
+								<%= @tempb %>
+							</div>
+						</div>
+					<% end %><!-- end of link-->
+				<% end %><!-- end of check (checked to se if daily views is less than 5)-->
+			<% end %><!-- end of loop -->
+		</div>
+	</div>	<!-- end- needs love -->
+<% end %><!-- end of checking if category is being viewed -->
+
+<!-- end- Favorites of the day -->
+
+
+
+
+
+
+
+
+
+
+<!-- ++++++++++++++++++ CATEGORY VIEW ++++++++++++++++++++ -->
+	<% if params[:category]%> <!-- check if category is being viewed (in the params) -->
+		<% @books.each do |book| %>
+				<%= link_to book_path(book) do %>
+					<div class="col-md-3 profile-index" style="overflow: hidden; min-height: 450px; max-height: 450px;">
+						<div style="min-height: 50px; max-height: 50px; overflow: hidden;"> 
+							<h4 style="font-size: 14pt">
+							<%= truncate(book.title, :length => 27, :omission => '...')%>
+							</h4>
+						</div>
+						<div style="border-bottom: 1px solid red; margin-bottom:10px; max-width: 260px; max-height: 260px; min-width: 260px; min-height: 260px;" class="test" >
+						<%= image_tag book.my_file.thumb.url, class: "org_img" %>
+						<br><br>
+					</div>
+						<div style=" max-height: 100px; min-height: 100px; overflow: hidden; white-space: normal; text-align: left;"> 
+							<%=  truncate(book.description, :length => 130, :omission => '... (continued)') %>
+							
+						</div>
+					</div>
+				<% end %><!-- end of link-->
+		<% end %><!-- end of loop -->
+	<% end %><!-- end of checking if its category view -->
+
+
+
+
+
+<!-- 	<div class="row" >
+		<% @books.each do |book| %>
+			<%= link_to book_path(book) do %>
+				<div class="col-md-3 col-sm-6 profile-index" style="overflow: hidden;">
+					<div style="min-height: 50px; max-height: 50px; overflow: hidden;"> 
+						<h4 style="font-size: 14pt">
+						<%= truncate(book.title, :length => 27, :omission => '...')%>
+						</h4>
+					</div>
+					<div style="border-bottom: 1px solid red; margin-bottom:10px; max-width: 260px; max-height: 260px;" class="test" >
+						<%= image_tag book.my_file.thumb.url, class: "org_img" %>
+						<br><br>
+					</div>
+					<div style=" max-height: 100px; min-height: 100px; overflow: hidden;"> 
+						<%=  truncate(book.description, :length => 130, :omission => '... (continued)') %>
+					</div>
+				</div>
+			<% end %>
+		<% end %>
+	</div> end of row --> 
+
+<% end %>
+
+
+
+<script>
+function scrollToFeed() {
+	$('html, body').animate({
+	    scrollTop: $(".row").offset().top
+	}, 1100);
+
+	//$('.noOrgsError').hide();
+
+	removeTheWarning ();
+}
+
+
+var hasBeenThatLow = false;
+
+function removeTheWarning (){
+	$(window).scroll(function() {
+	    var height = $(window).scrollTop();
+
+	    if(height  > 250) {
+	        console.log(height);
+	        //$('.noOrgsError').hide();
+	        hasBeenThatLow = true;
+	    }
+
+		if(height  < 10 && hasBeenThatLow == true) {
+			$('.noOrgsError').css('visibility', 'hidden');
+			$('.noOrgsError').hide();
+			
+	    }
+	});
+}
+</script>

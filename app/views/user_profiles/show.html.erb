@@ -1,0 +1,72 @@
+<h3><% @user.email %></h3>
+
+<!-- <h1>x</h1><h1>x</h1><h1>x</h1><h1>x</h1><h1>x</h1><h1>x</h1><h1>x</h1><h1>x</h1><h1>x</h1><h1>x</h1><h1>x</h1><h1>x</h1><h1>x</h1> -->
+
+<!-- <div class="col-md-4" style="background-color: #BE90D4; min-height: 300px;">
+	<h1><center> Reach site assistant </center></h1><br><br>
+	<h4>How can i assist you John </h4>
+	<input type="text" name="dummy" />
+</div>end of chatbot div --> 
+
+
+
+
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<h2><a id="orgs"></a>Your Orgs</h2>
+
+<div id="org_list">
+	<% @user_orgs.each do |o| %>
+		<h3><%= link_to o.title, book_path(o) %></h3>
+	<% end %>
+</div>
+
+<%=  %>
+
+<script>
+
+//---* make organisation list blink when theres a anchor hash in url *---/
+var runAlready = false;
+
+function blink() {
+   $("#org_list").fadeTo(100, 0.1).fadeTo(200, 1.0);
+}
+
+if(window.location.hash && runAlready == false) {
+	runAlready = true;
+	var iterations = 0;
+	var interval = setInterval(foo, 1000);
+	function foo() {
+	iterations++;
+	if (iterations >= 3)
+	    clearInterval(interval);
+		blink();
+	}
+} 
+</script>
+
+

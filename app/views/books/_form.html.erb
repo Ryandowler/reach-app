@@ -1,0 +1,26 @@
+<%= simple_form_for @book , :html => { :multipart => true } do |f| %>
+<%= select_tag(:category_id, options_for_select(@categories), :prompt => "Select a Fitting Category")%>
+	
+	<br><br>
+
+	<!--			Name -->
+	<h4 class="fieldHeader"> Name of the Organization </h4>
+	<%= f.input :title, label: false, :input_html => { :id => 'org_name' } %>
+
+	<!--			Description -->
+	<h4 id="price" class="fieldHeader"> Description </h4>
+	<%= f.input :description, label: false, :input_html => { :id => 'org_description' } %>
+
+
+	<!--			Address -->
+	<h4 id="address" class="fieldHeader"> Address </h4>
+	<%= f.input :address, label: false, :input_html => { :id => 'org_address' } %>
+
+	<!--			Image -->
+	<h4 class="fieldHeader"> Representing image (profile picture) </h4>
+	<%= f.file_field :my_file %>
+
+	<!--			Submit -->
+	<br><br>
+	<%= f.button :submit %>
+<% end %>

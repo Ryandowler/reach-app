@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Reach</title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+	<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+
+	<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+	<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+	<%= csrf_meta_tags %>
+
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+	<link href="/assets/simple-sidebar.css" rel="stylesheet">
+
+	<!-- back to top -->
+	<link href="/assets/floating-btn-styles.css" rel="stylesheet">
+</head> 
+<style>
+	#listOfOrgs ul.dropdown-cart{min-width:250px;}
+	#listOfOrgs ul.dropdown-cart li .item{
+	    display:block;
+	    padding:3px 10px;
+	    margin: 3px 0;
+	}
+	#listOfOrgs ul.dropdown-cart li .item:hover{background-color:#f3f3f3;}
+	#listOfOrgs ul.dropdown-cart li .item:after{
+	    visibility: hidden;
+	    display: block;
+	    font-size: 0;
+	    content: " ";
+	    clear: both;
+	    height: 0;
+	}
+	#listOfOrgs ul.dropdown-cart li .item-left{float:left;}
+	#listOfOrgs ul.dropdown-cart li .item-left img,
+	#listOfOrgs ul.dropdown-cart li .item-left span.item-info{ float:left; }
+	#listOfOrgs ul.dropdown-cart li .item-left span.item-info{ margin-left:10px; }
+	#listOfOrgs ul.dropdown-cart li .item-left span.item-info span{ display:block; }
+	#listOfOrgs ul.dropdown-cart li .item-right{ float:right; }
+	#listOfOrgs ul.dropdown-cart li .item-right button{ margin-top:14px; }
+
+	#listOfOrgs ul > .listOfOrgs_li:hover{ background-color: orange; }
+	.listOfOrgs_li a{ color: green; }
+
+	/* 'my organizations' dropdown */
+	.eachOrgInDropdown{
+		border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+		padding-bottom: 5px;
+	}
+	.OrgImage_InDropdown{
+		background-color: purple; overflow: hidden; 
+		border-radius: 100%; max-height: 70px; max-width: 70px;
+		min-height: 70px; min-width: 70px;
+	}
+	.OrgTitle_InDropdown{
+		margin-left: -10px; overflow: hidden; 
+		max-height: 50px; font-size: 12pt;
+	}
+	/* ./ dropdown */
+
+	/* logo */
+	.logo{
+		width:20%;
+		height:20%;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* sidee barr new */
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    z-index: 1300; /* so it overlaps the navbar so the x is visible */
+
+}
+.sidenav li {
+	list-style-type: none;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s
+}
+
+.sidenav a:hover, .offcanvas a:focus{
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+/* ./ end -sidee barr */
+
+/* place holder text */
+ :-moz-placeholder{color: orange;} 
+ :-ms-input-placeholde{color: orange;}
+::-webkit-input-placeholder{color: orange; font-weight: 600; font-size: 1.2em;}
+</style>
+
+<body >
+
+<!-- ryan this is the new sidebar delete old code-->
+<div id="mySidenav" class="sidenav scrollBar_nice countryList">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+ <!--   <ul class="countryList"> -->
+   <input placeholder="Search..." id="s" type="text" style="margin-left: 20px; border-radius: 3px;" /> 
+  <br />
+<li><a href="#1">India</a></li>
+      <li class="sidebarLi menuitem"><a href="#2">United States</a></li>
+      <li class="sidebarLi menuitem"><a href="#3">Pakistan</a></li>
+      <li id="theDiv" ><a href="#4">Sri Lanka</a></li>
+      <li id="theDiv"><a href="#5">Bangladesh</a></li>
+<% Category.all.each do |category| %>
+
+	<!-- cant do it this way, the searchbar does not like it this way -->
+	<!-- 	<li  id="theDiv" class="<%= 'active' if params[:category] == category.name %> sidebarLi menuitem">
+		<% link_to category.name, books_path(category: category.name), class: "link" %>
+	</li> -->
+
+	<!-- this way is being used instead -->
+
+	<li id="theDiv" class="sidebarLi menuitem">
+		<a href="/books?category=<%= category.name %>"><%= category.name %></a>
+	</li>
+
+<% end %>
+
+
+
+<!-- </ul> -->
+
+<!-- <div style="margin-left: auto;margin-right: auto;width: 200px;">
+  <input placeholder="Search..." id="s" type="text" /> 
+  <br />
+  <ul class="countryList">
+      <li><a href="#1">India</a></li>
+      <li><a href="#2">United States</a></li>
+      <li><a href="#3">Pakistan</a></li>
+      <li><a href="#4">Sri Lanka</a></li>
+      <li><a href="#5">Bangladesh</a></li>
+      <li><a href="#6">Canada</a></li>
+      <li><a href="#7">United Kingdom</a></li>
+      <li><a href="#8">Australia</a></li>
+      <li><a href="#8">Australia2</a></li>
+      <li><a href="#8">Australia3</a></li>
+      <li><a href="#8">Australia5</a></li>
+      <li><a href="#8">Australia55</a></li>
+      <li><a href="#">Argentina</a></li>
+  </ul>
+</div> -->
+
+
+</div>
+
+
+
+<script>
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+    $( "#showSidebarBtn" ).hide();
+
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    $( "#showSidebarBtn" ).show();
+}
+
+
+</script>
+
+
+
+	<!-- Navigation-->
+	<nav class = "navbar navbar-default">
+		<div class = "navbar-header">
+			<%= link_to "Reach", root_path, class: "navbar-brand" %>
+			
+		</div>
+
+		<ul class="nav navbar-nav">
+			<!--show SIGN OUT if user is signed in and show SIGN IN if user is not signed in-->
+			<% if user_signed_in? %>
+				<li><%= link_to "Sign Out", destroy_user_session_path, method: :delete %></li>
+			<% else %>
+				<li><%= link_to "Sign Up", new_user_registration_path %></li>
+				<li> <%= link_to "Log In", new_user_session_path %></li>
+			<% end %>
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+			<!-- Only allow the add book link when a user is signed in, no strangers-->
+			<% if user_signed_in? %>
+				<li id="listOfOrgs" class="dropdown" style="margin-top: 5px;" onclick="openOrglist()">
+		          	<a href="#" class="dropdown-toggle" data-toggle="dropdown" 
+		          	   role="button" aria-expanded="false">
+		          	   		My Organizations <span class="caret"></span>
+		          	</a>
+					<ul class="dropdown-menu dropdown-cart col-md-12" role="menu">
+						<% @app_books3.each do |b| %>
+
+							<li class="col-md-12 listOfOrgs_li eachOrgInDropdown">
+							  <!-- Image of current org -->
+							  	<div class="col-md-1 OrgImage_InDropdown OrgTitle_InDropdown" style="">
+							  		<%= image_tag b.my_file.tiny.url,:style => "margin-left: -20px" %>
+							   	</div>
+								<div class="col-md-7">
+									<!-- Links to current org -->
+									<%= link_to truncate(b.title, :length => 23, :omission => '..'), book_path(b.id) %>
+								</div>
+							    <div class="col-md-1" style="padding-top: 20px;">
+							    	<%= link_to '<i class="glyphicon glyphicon-wrench"></i>'.html_safe, 
+							    	{:controller => "books", :action => "edit", :id => b.id } %>
+							    </div>
+							</li>
+						<% end %>
+						<li class="divider"></li>
+						<li> <%= link_to "View all (#{org_count})", 
+							 	 user_profile_path(current_user.id, :anchor => "orgs"), 
+							 	 :class => "text-center"%>
+						</li>
+					</ul>
+		        </li>
+		        <li class="btn" role="button"><%= link_to "Profile", user_profile_path(current_user.id) %></li>
+		        <!-- Create new org -->
+				<li class="btn btn-primary btn-sm gradient createOrganizationBtn" 
+					role="button"><%= link_to "Create an Organization ", new_book_path %>
+				</li>
+			<% end %>
+		</ul>
+	</nav>
+	<!-- ./ Navigation-->
+
+
+
+
+
+
+
+
+
+
+<div id="showSidebarBtn" class="toggled hidden-md hidden-sm hidden-xs" 
+			 style="overflow: hidden; margin-top: 20px; z-index: 1100; position: fixed; background-color: orange; cursor: pointer; padding-left: 10px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; border-radius: 3px; " onclick="openNav();">
+			 <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span><br>
+			 Show
+		</div>
+
+
+
+
+
+
+	
+	<!--sidebar-->
+	<div class="col-md-12" style="margin-top: -20px;  overflow:auto; background-color: white;">
+		<!-- "show sidebar" button -->
+		<div id="showSidebarBtn" class="toggled hidden-md hidden-sm hidden-xs" 
+			 style="overflow: hidden; margin-left: -20px; margin-top: 20px; z-index: 1100; display: none; position: fixed; background-color: orange; cursor: pointer; padding-left: 10px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; border-radius: 3px; ">
+			 <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span><br>
+			 Show
+		</div>
+		<!--left-->
+		<div id="tt" class="toggled col-md-2 hidden-md hidden-sm hidden-xs" id="leftCol" 
+					 style="overflow: hidden; margin-left: -30px; padding-right: 20px; display: none;">
+			<ul class="nav nav-stacked" id="sidebar">
+				<div id="style-1" style=" width:65%; background-color:#ecf0f1; cursor: pointer; display: none;">
+					<li id="theDiv" class="hideSideBar sidebarLi menuitem" style="float:right; font-size: 10pt; border-radius: 3px; width:40%; ">
+						<div>
+							<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span><br>
+							Hide
+						</div>
+					</li>
+					<br><br><br>
+				</div>
+
+				<div id="sidey" style="height:3000px " style="background-color: black">
+					<div id="style-1" style="overflow:auto; height:30%; width:65%; background-color:#ecf0f1; 						 overflow-x: hidden;">
+						<li  id="theDiv" class="sidebarLi menuitem" style="border-top: 2px solid white;">
+							<%= link_to "ALL", root_path, class: "link" %>
+						</li>
+						<% Category.all.each do |category| %>
+							<li  id="theDiv" class="<%= 'active' if params[:category] == category.name %> sidebarLi menuitem">
+								<%= link_to category.name, books_path(category: category.name), class: "link" %>
+			 				</li>
+						<% end %>
+					</div> 
+				</div> 
+			</ul>
+		</div><!--/left-->
+
+		<!--content (right)-->
+		<div id="content-right-of-sidebar" class="col-lg-12" style="">
+			<div class="" style="overflow: hidden;">
+				<!-- Only try outout an error if there is one, and when there is its okay to pass html structed/styled error-->
+				<p id="error"><%= flash[:error].html_safe unless flash[:error].blank? %> </p>	
+				<p class="notice"><%= notice %></p>
+				<p class="alert"><%= alert %></p>
+				<%= yield %>
+			</div>
+		</div><!--/right-->
+	</div><!--/container-->
+
+    <script>
+    	//tool tips
+	    $("#showSidebarBtn").attr('title', 'Display Sidebar');
+	    $("#style-1").attr('title', 'Remove Sidebar');
+	    $(".editOrgBtn").attr('title', 'This option is only available to you');
+	    $(".deleteOrgBtn").attr('title', 'This option is only available to you');
+    	// ./tool tips
+
+    	//hover over sidebar hide/show buttons to change its apearance
+		$( "#showSidebarBtn").hover(function() {
+		  	$(this).css('background-color','#EE178C');
+		});
+		$( "#showSidebarBtn").mouseout(function() {
+	  		$(this).css('background-color','orange');
+		});	
+		// ./
+
+		// --
+	    $( "#showSidebarBtn").click(function() {
+		  	//toggleSidebar();
+		});
+		$( "#style-1").click(function() {
+		  	//toggleSidebar();
+		});
+		// ./
+
+		/* activate sidebar */
+		$('#sidebar').affix({
+		  offset: {
+		    top: 0
+		  }
+		});
+		// ./
+
+		/* open dropdown menu when its clicked */
+		function openOrglist(){
+			$("#listOfOrgs").addClass(" open");
+		}
+		// ./
+
+		// --- sidebar ---
+		// button click makes sidbar go blury and hides it
+		// and removes the blur and shows it on every odd click
+	 	var clickedAway;
+		function toggleSidebar(){
+
+			if (clickedAway == false || clickedAway == null ){
+				$("#tt > ul").addClass( "blur" );
+				$("#tt").animate({width:'toggle'},350);
+				clickedAway = true;
+				$('#content-right-of-sidebar').css('paddingLeft', '200px');
+				//give it almost 1 sec before show the "show sidebar" btn
+				setTimeout(function(){
+				  showHideBtn();
+				}, 800);
+			}
+			else if (clickedAway == true){
+				$('#showSidebarBtn').hide();
+				$("#tt > ul").removeClass( "blur" );
+				$("#tt").animate({width:'toggle'},350);
+				clickedAway = false;
+				$('#content-right-of-sidebar').css('paddingLeft', '20px');
+			}
+		}
+
+
+		//if anywhere is clicked other than navbar and sidebar itself well then close sidebar (new)
+		$('#content-right-of-sidebar').click(function() {
+		   document.getElementById("mySidenav").style.width = "0";
+		    $( "#showSidebarBtn" ).show();
+		});
+    </script>
+
+
+<!-- +++ back to top +++ -->
+<script type="text/javascript">
+// create the back to top button
+$('body').prepend('<a href="#" class="back-to-top">Back to Top</a>');
+
+var amountScrolled = 300;
+
+$(window).scroll(function() {
+	if ( $(window).scrollTop() > amountScrolled ) {
+		$('a.back-to-top').fadeIn('slow');
+	} else {
+		$('a.back-to-top').fadeOut('slow');
+	}
+});
+
+$('a.back-to-top, a.simple-back-to-top').click(function() {
+	$('html, body').animate({
+		scrollTop: 0
+	}, 700);
+	return false;
+});
+</script>
+<!-- end- +++ back to top +++ -->
+
+
+
+<script>
+	
+$( document ).ready(function() {
+  $('#s').keyup(function(){
+   var valThis = $(this).val().toLowerCase();
+    $('.countryList>li').each(function(){
+     var text = $(this).text().toLowerCase();
+        (text.indexOf(valThis) == 0) ? $(this).show() : $(this).hide();            
+   });
+  });
+});
+
+</script>
+
+	<!-- chatbot -->
+	<div class="chat-bot-float">
+		<% if @user %>
+		<!-- pass username and html class to be used in the partial -->
+			<%= display_my_html(@user, {html_class: "active"}) %>
+		<% else %>
+		<!-- if user is not signed in or if their username is unavailible-->
+			<%= display_my_html(999) %>
+		<% end %>
+	</div>
+
+
+
+
+</body>
+</html>
